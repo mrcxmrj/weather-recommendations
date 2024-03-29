@@ -1,0 +1,21 @@
+<hgroup>
+	<h2>Here are some tracks matching todays weather</h2>
+	<p>
+		feels like: {{ weather_info.feelslike_c }}°, precipitation: {{ weather_info.precip_mm }}mm, sun time: {{
+		weather_info.suntime_hours }}h<br>
+		suggested valence: {{ recommendation_info.valence }}, energy: {{
+		recommendation_info.energy }}
+	</p>
+</hgroup>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px">
+	{% for track in tracks_info %}
+	<article style="width: 300px; margin: 0">
+		<hgroup>
+			<h3>{{ track.track_name }}</h3>
+			<p>{{ track.artists_names | join(", ") }}</p>
+		</hgroup>
+		<img src="{{ track.first_image }}" alt="Album Art" width="150">
+		<p><a href="{{ track.spotify_external_url }}" target="_blank">Listen on Spotify</a></p>
+	</article>
+	{% endfor %}
+</div>

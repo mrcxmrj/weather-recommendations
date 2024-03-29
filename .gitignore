@@ -1,0 +1,5 @@
+.env
+start
+static/
+__pycache__/
+env/

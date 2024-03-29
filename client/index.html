@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Recommendations</title>
+  <script type="module" src="src/main.ts"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+</head>
+
+<body>
+  <header class="container">
+    <h1 class="pico-color-slate-500">Weather Recommendations</h1>
+  </header>
+  <main class="container">
+    <section id=profile>
+      <button id="login" style="background-color: #1DB954;">Log in with Spotify</button>
+    </section>
+    <section>
+      <form id="input">
+        <fieldset class="grid">
+          <label>
+            Longitude
+            <input id="longitude" name="longitude" placeholder="0°" />
+          </label>
+          <label>
+            Latitude
+            <input id="latitude" name="latitude" placeholder="0°" />
+          </label>
+        </fieldset>
+        <fieldset>
+          <label>
+            Genres (you can see supported genres <a
+              href="https://gist.github.com/drumnation/91a789da6f17f2ee20db8f55382b6653">here</a>)
+            <textarea name="genres" placeholder="Provide comma-separated genres"
+              aria-label="Comma separated genres"></textarea>
+          </label>
+        </fieldset>
+        <input id="submit" type="submit" value="Submit" disabled />
+      </form>
+    </section>
+    <section id="recommendations"></section>
+  </main>
+</body>
+
+</html>
