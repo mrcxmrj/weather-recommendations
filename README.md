@@ -3,7 +3,9 @@ I noticed that my music taste tracks very closely with the current weather - so 
 You can check it out [here](https://weather-recommendations.onrender.com/). You can also view the endpoints at `/docs` route.
 ## Build from source
 ### Connecting with Spotify
-You need to create a new app in the [Spotify developer dashboard](https://developer.spotify.com/dashboard) and add your development server address (e.g. http://localhost:8000/) to Redirect URIs column. This will also generate your apps Client ID and Client secret.
+You need to create a new app in the [Spotify developer dashboard](https://developer.spotify.com/dashboard) and add your development server address (e.g. http://127.0.0.1:8000/) to Redirect URIs column. This will also generate your apps Client ID and Client secret.
+> [!IMPORTANT]
+> Make sure that the address you added as Redirect URI in Spotify matches your dev server's address - including the trailing `/`
 ### Connecting with Weather API
 I used [weather api](https://www.weatherapi.com/). After creating an account the key will be available in the Dashboard section.
 ### Dotenv
@@ -32,4 +34,5 @@ To run a development server:
 ```bash
 uvicorn main:app --reload
 ```
-**_NOTE:_**  If you make changes to the client code you'll need to rebuild it manually using `npm run build` in the client directory
+> [!NOTE]
+> If you make changes to the client code you'll need to rebuild it manually using `npm run build` in the client directory
