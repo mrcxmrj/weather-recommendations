@@ -29,10 +29,23 @@ npm run build
 cd ..
 pip install -r requirements.txt
 ```
-### Running
+## Development
 To run a development server:
 ```bash
 uvicorn main:app --reload
 ```
+If you make changes to the client code you'll need to rebuild it manually using:
+```bash
+# from the client directory
+npm run build
+```
 > [!NOTE]
-> If you make changes to the client code you'll need to rebuild it manually using `npm run build` in the client directory
+> No need to restart the uvicorn server after rebuilding the client
+
+If you plan on making a lot of client changes, with no backend interactions - it's better to just run the client dev server, using:
+```bash
+# also in the client directory
+npm run dev
+```
+> [!NOTE]
+> Make sure to kill the uvicorn server first, so it doesn't occupy the 8000 port
