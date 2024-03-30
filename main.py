@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime
 from typing import Annotated
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi import FastAPI, Header, Request
+from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -35,7 +35,13 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/api/weather_recommendations", response_class=HTMLResponse)
 async def get_weather_recommendations(request: Request, latitude: str, longitude: str, genres: str, access_token: Annotated[str | None, Header()] = None):
-    if not access_token: return
+    access_token = access_token
+    if not access_token:
+        authorization_response = await authorize_spotify()
+        access_token = authorization_response["access_token"]
+    if not access_token:
+        print("asdfasdf", access_token)
+        raise HTTPException(status_code=502, detail="Error authenticating with Spotify")
 
     weather_data, suntime_data = await (asyncio.gather(fetch_weather(latitude, longitude),fetch_suntime(latitude, longitude)))
 
@@ -60,6 +66,9 @@ async def get_weather_recommendations(request: Request, latitude: str, longitude
 
 @app.get("/api/recommendations")
 async def fetch_recommendations(access_token: str, target_valence: float, target_energy: float, seed_genres: str):
+    if not access_token: raise HTTPException(status_code=401)
+    if not seed_genres: raise HTTPException(status_code=400)
+
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
@@ -90,9 +99,10 @@ def extract_recommendations(data):
     return tracks_info
 
 weather_api_url = lambda api_method, latitude, longitude: f"http://api.weatherapi.com/v1/{api_method}?key=e67c5fd1d3fc4375b1e210330241603 &q={latitude},{longitude}&aqi=no"
+is_number = lambda var: isinstance(var, (int, float))
 
 @app.get("/api/weather")
-async def fetch_weather(latitude, longitude):
+async def fetch_weather(latitude: float, longitude: float):
     response = requests.get(weather_api_url("current.json", latitude, longitude))
     return response.json()
 def extract_weather(data):
@@ -101,7 +111,7 @@ def extract_weather(data):
     return feelslike_c, precip_mm
 
 @app.get("/api/suntime")
-async def fetch_suntime(latitude, longitude):
+async def fetch_suntime(latitude: float, longitude: float):
     response = requests.get(weather_api_url("astronomy.json", latitude, longitude))
     return response.json()
 def extract_suntime(data):

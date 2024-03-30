@@ -44,7 +44,7 @@ async function handleSubmit(event: MouseEvent) {
   const longitude = formData.get("longitude")?.slice(0, -1) as string
   const genres: string[] = (formData.get("genres") as string).split(",").map(entry => entry.trim())
 
-  const template = await getRecommendations(accessToken!, latitude, longitude, genres)
+  const template = await getRecommendations(accessToken ?? "", latitude, longitude, genres)
   recommendationsSection!.innerHTML = template
 }
 
