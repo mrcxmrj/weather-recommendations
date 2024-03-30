@@ -1,7 +1,7 @@
 # Weather Recommendations
 I noticed that my music taste tracks very closely with the current weather - so I made an app than understands that.\
 You can check it out [here](https://weather-recommendations.onrender.com/). You can also view the endpoints at `/docs` route.
-## Build from source
+## Building from source
 ### Connecting with Spotify
 You need to create a new app in the [Spotify developer dashboard](https://developer.spotify.com/dashboard) and add your development server address (e.g. http://127.0.0.1:8000/) to Redirect URIs column. This will also generate your apps Client ID and Client secret.
 > [!IMPORTANT]
