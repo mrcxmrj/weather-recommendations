@@ -8,13 +8,18 @@ const code = params.get("code");
 let accessToken = sessionStorage.getItem("access-token")
 const url = new URL(window.location.href)
 const baseUrl = url.origin + url.pathname
-// let baseUrl = url.indexOf('?') === -1 ? url : url.slice(0, url.indexOf('?') - 1);
 
 onLoad()
 async function onLoad() {
   getLocation()
+  alert("The app is currently in beta testing mode, so if you haven't been added use the guest login")
+
+  const submitBtn = document.getElementById("submit") as HTMLInputElement
+  submitBtn!.addEventListener("click", handleSubmit)
 
   document.getElementById("login")!.addEventListener("click", () => redirectToAuthCodeFlow(clientId, baseUrl))
+  document.getElementById("anonymous-login")!.addEventListener("click", () => { submitBtn.disabled = false; populateProfileView() })
+
   if (code) {
     accessToken = await getAccessToken(clientId, code, baseUrl);
     sessionStorage.setItem("access-token", accessToken)
@@ -22,12 +27,11 @@ async function onLoad() {
   if (accessToken) {
     const profile = await fetchProfile(accessToken);
 
-    const submitBtn = document.getElementById("submit") as HTMLInputElement
-    submitBtn!.addEventListener("click", handleSubmit)
     submitBtn.disabled = false
     populateProfileView(profile);
   }
 }
+
 
 async function handleSubmit(event: MouseEvent) {
   event.preventDefault()
@@ -52,10 +56,18 @@ async function fetchProfile(token: string): Promise<UserProfile> {
   return await result.json();
 }
 
-function populateProfileView(profile: UserProfile) {
-  const profileInfo = `<span style="color: gray"> Logged in as </span> <span>${profile.display_name}</span>`
-  const profileImage = profile.images[0] ? `<img src="${profile.images[0].url}" style="border-radius: 50%; margin-left: 10px" width="50" height="50"/>` : ""
-  document.getElementById("profile")!.innerHTML = `<h2>${profileInfo}${profileImage}</h2>`
+function populateProfileView(profile?: UserProfile) {
+  const profileSection = document.getElementById("profile")!
+  const displayNameTemplate = (name: string) => `<span style="color: gray"> Logged in as </span> <span>${name}</span>`
+
+  if (!profile) {
+    profileSection.innerHTML = `<h2>${displayNameTemplate("guest")}</h2>`
+    return
+  }
+
+  const profileDisplayNameTemplate = displayNameTemplate(profile.display_name)
+  const profileImageTemplate = profile.images[0] ? `<img src="${profile.images[0].url}" style="border-radius: 50%; margin-left: 10px" width="50" height="50"/>` : ""
+  profileSection.innerHTML = `<h2>${profileDisplayNameTemplate}${profileImageTemplate}</h2>`
 }
 
 async function getRecommendations(accessToken: string, latitude: string, longitude: string, genres: string[]) {
