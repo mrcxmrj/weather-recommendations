@@ -1,13 +1,14 @@
 <hgroup>
 	<h2>Here are some tracks matching todays weather</h2>
 	<p>
-		feels like: {{ weather_info.feelslike_c }}°, precipitation: {{ weather_info.precip_mm }}mm, sun time: {{
+		feels like: {{ weather_info.feelslike_c }}°C, precipitation: {{ weather_info.precip_mm }}mm, sun time: {{
 		weather_info.suntime_hours }}h<br>
 		suggested valence: {{ recommendation_info.valence }}, energy: {{
 		recommendation_info.energy }}
 	</p>
 </hgroup>
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px">
+	{% if tracks_info %}
 	{% for track in tracks_info %}
 	<article style="width: 300px; margin: 0">
 		<hgroup>
@@ -18,4 +19,7 @@
 		<p><a href="{{ track.spotify_external_url }}" target="_blank">Listen on Spotify</a></p>
 	</article>
 	{% endfor %}
+	{% else %}
+	<p>No tracks found :/ (maybe check if genres are correct?)</p>
+	{% endif %}
 </div>
