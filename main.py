@@ -40,7 +40,6 @@ async def get_weather_recommendations(request: Request, latitude: str, longitude
         authorization_response = await authorize_spotify()
         access_token = authorization_response["access_token"]
     if not access_token:
-        print("asdfasdf", access_token)
         raise HTTPException(status_code=502, detail="Error authenticating with Spotify")
 
     weather_data, suntime_data = await (asyncio.gather(fetch_weather(latitude, longitude),fetch_suntime(latitude, longitude)))
@@ -151,10 +150,8 @@ async def authorize_spotify():
 
 @app.get("/callback")
 async def callback(request: Request):
-    # Extracting query parameters
     params = request.query_params
     
-    # Constructing new URL without /callback
     new_path = "/"
     new_url = f"{request.url.scheme}://{request.url.netloc}{new_path}"
     
